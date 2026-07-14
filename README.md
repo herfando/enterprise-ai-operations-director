@@ -6,6 +6,7 @@
 
 Modern enterprises generate massive amounts of operational data every day across multiple departments:
 
+- Sales & Marketing
 - Production
 - PPIC
 - QCQA
@@ -20,7 +21,7 @@ However, critical business decisions are still dependent on manual reporting, di
 
 **Enterprise AI Operations Director transforms fragmented enterprise information into autonomous operational intelligence.**
 
-It acts as a digital executive that observes company conditions, reasons across departments, decides priorities, executes actions, and continuously monitors business outcomes.
+It acts as a digital executive that creates a single operational intelligence layer across departments, observes company conditions, reasons across business functions, decides priorities, executes actions, and continuously monitors business outcomes.
 
 ---
 
@@ -50,7 +51,7 @@ The system:
 2. Analyzes structured and unstructured data.
 3. Detects anomalies and operational risks.
 4. Performs cross-functional reasoning.
-5. Generates decisions and recommendations.
+5. Generates operational decisions and action plans.
 6. Executes contextual business actions.
 7. Monitors results and creates continuous improvement loops.
 
@@ -58,36 +59,28 @@ The system:
 
 # 🧠 How It Works
 
+```text
 Enterprise Data Sources
-
-Excel | CSV | PDF | PowerPoint | Images | Reports | Text
-|
-v
-
-          Data Intelligence Layer
-
-                     |
-                     v
-
-          AI Operations Director
-
-                     |
-    ---------------------------------
-    |              |                |
-
-Analyze Decide Execute
-
-                     |
-                     v
-
-          Workflow Automation
-
-                     |
-                     v
-
-          Monitoring & Feedback Loop
-
----
+(Structured + Unstructured Data)
+            |
+            v
+ Snowflake AI Data Cloud
+            |
+            v
+ AI Operations Director Agent
+            |
+   -------------------------
+   |           |            |
+Analyze     Decide      Execute
+   |           |            |
+   -------------------------
+            |
+            v
+ Intelligent Workflow Automation
+            |
+            v
+ Monitoring + Feedback Loop
+```
 
 # 🤖 Agent Architecture
 
@@ -97,15 +90,26 @@ The central intelligence that coordinates all business functions.
 
 Responsibilities:
 
-- Understand operational conditions
+- Analyze operational conditions
 - Prioritize business risks
 - Connect information across departments
 - Generate executive decisions
-- Trigger workflows
+- Execute and monitor workflows
 
 ---
 
 ## Department AI Agents
+
+### Sales & Marketing Agent
+
+Analyzes:
+
+- Customer demand
+- Sales trends
+- Market signals
+- Customer requirements
+- Order priorities
+- Revenue impact
 
 ### Production Agent
 
@@ -218,11 +222,19 @@ Maintenance overdue
 Risk Level:
 HIGH
 
+Business Impact:
+
+- Potential delivery delay
+- Increased production cost
+- Customer satisfaction risk
+
 ## AI Action
 
 The system executes:
 
 ✓ Generate corrective action plan
+
+✓ Request management approval
 
 ✓ Create maintenance task
 
@@ -272,6 +284,18 @@ A manufacturing enterprise scenario demonstrates:
 - Root cause reasoning
 - Workflow execution
 - Executive decision support
+
+---
+
+# 🎯 Business Impact
+
+Enterprise AI Operations Director helps organizations:
+
+- Reduce decision-making time
+- Detect operational risks earlier
+- Improve cross-department collaboration
+- Reduce downtime and quality losses
+- Enable proactive management instead of reactive problem solving
 
 ---
 
