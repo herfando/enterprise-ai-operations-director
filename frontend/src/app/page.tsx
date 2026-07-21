@@ -1,3 +1,5 @@
+"use client";
+
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import HealthCard from "@/components/HealthCard";
@@ -7,7 +9,13 @@ import WorkflowMonitor from "@/components/WorkflowMonitor";
 
 import { departments } from "@/lib/data";
 
+import { useState } from "react";
+import type { Department } from "@/lib/data";
+
 export default function Home() {
+  const [selectedDepartment, setSelectedDepartment] =
+    useState<Department | null>(null);
+
   return (
     <main className="flex min-h-screen bg-slate-100">
       {/* Sidebar */}
@@ -53,6 +61,7 @@ export default function Home() {
               status={department.status}
               risk={department.risk}
               kpis={department.kpis}
+              onClick={() => setSelectedDepartment(department)}
             />
           ))}
         </div>

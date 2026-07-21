@@ -5,9 +5,16 @@ type Props = {
   status: string;
   risk: string;
   kpis: KPI[];
+  onClick: () => void;
 };
 
-export default function DepartmentCard({ name, status, risk, kpis }: Props) {
+export default function DepartmentCard({
+  name,
+  status,
+  risk,
+  kpis,
+  onClick,
+}: Props) {
   const riskColor =
     risk === "High"
       ? "bg-red-100 text-red-700 border-red-300"
@@ -23,7 +30,7 @@ export default function DepartmentCard({ name, status, risk, kpis }: Props) {
         : "text-green-600";
 
   return (
-    <div className="bg-white rounded-xl shadow p-5 border">
+    <div onClick={onClick} className="bg-white rounded-xl shadow p-5 border">
       <h3 className="text-lg font-bold text-slate-900">{name}</h3>
 
       <div className="mt-4 space-y-2">
