@@ -5,7 +5,8 @@ def extract_ppt_text(file_path):
 
     prs = Presentation(file_path)
 
-    text = ""
+    text = []
+
 
     for slide in prs.slides:
 
@@ -13,6 +14,11 @@ def extract_ppt_text(file_path):
 
             if hasattr(shape, "text"):
 
-                text += shape.text + "\n"
+                if shape.text.strip():
 
-    return text
+                    text.append(
+                        shape.text
+                    )
+
+
+    return "\n".join(text)
