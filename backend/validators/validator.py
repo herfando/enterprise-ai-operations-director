@@ -1,40 +1,48 @@
-from .department_rules import DEPARTMENT_RULES
+from app.schemas.department_loader import load_department_schema
 
 
 def validate_department_data(
-    department:str,
-    extracted_data:dict
+    department: str,
+    extracted_data: dict
 ):
 
-    required_fields = DEPARTMENT_RULES.get(
-        department,
-        []
+    schema = load_department_schema(
+        department.lower()
     )
 
 
-    missing = []
+    missing_fields = []
+
+
+    required_fields = [
+        field
+        for field in schema["fields"]
+        if field.get("required")
+    ]
 
 
     for field in required_fields:
 
-        if field not in extracted_data:
-            missing.append(field)
+        field_id = field["id"]
+
+        if field_id not in extracted_data:
+            missing_fields.append(
+                field_id
+            )
 
 
-    if missing:
+    if missing_fields:
 
         return {
-            "status":"incomplete",
-            "department":department,
-            "missing_data":missing,
-            "message":
-            "Additional data required"
+            "status": "incomplete",
+            "department": schema["name"],
+            "missing_data": missing_fields,
+            "message": "Additional data required"
         }
 
 
     return {
-        "status":"ready",
-        "department":department,
-        "message":
-        "Data validation completed"
+        "status": "ready",
+        "department": schema["name"],
+        "message": "Data validation completed"
     }

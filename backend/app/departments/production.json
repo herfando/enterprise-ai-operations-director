@@ -1,0 +1,77 @@
+{
+  "id": "production",
+
+  "name": "Production",
+
+  "priority": "critical",
+
+  "fields": [
+    {
+      "id": "output",
+      "label": "Production Output",
+      "type": "number",
+      "required": true,
+      "dashboard": true
+    },
+
+    {
+      "id": "oee",
+      "label": "Overall Equipment Effectiveness",
+      "type": "percentage",
+      "required": true,
+      "target": 85,
+      "dashboard": true
+    },
+
+    {
+      "id": "availability",
+      "label": "Machine Availability",
+      "type": "percentage",
+      "required": true,
+      "target": 90,
+      "dashboard": true
+    },
+
+    {
+      "id": "performance",
+      "label": "Machine Performance",
+      "type": "percentage",
+      "required": true,
+      "target": 95,
+      "dashboard": true
+    },
+
+    {
+      "id": "quality",
+      "label": "Product Quality",
+      "type": "percentage",
+      "required": true,
+      "target": 98,
+      "dashboard": true
+    },
+
+    {
+      "id": "downtime",
+      "label": "Machine Downtime",
+      "type": "minutes",
+      "required": true,
+      "dashboard": true
+    },
+
+    {
+      "id": "root_cause",
+      "label": "Root Cause Analysis",
+      "type": "text",
+      "required": false,
+      "dashboard": false
+    }
+  ],
+
+  "workflow": {
+    "on_critical": [
+      "notify_maintenance",
+      "create_action_plan",
+      "monitor_recovery"
+    ]
+  }
+}
