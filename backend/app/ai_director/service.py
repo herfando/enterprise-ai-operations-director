@@ -1,15 +1,18 @@
+from app.database.service import execute_query
+
 from .queries import AI_DECISION_QUERY
 
 
 def get_ai_decision():
 
-    # sementara test dulu
-    # nanti di sini kita sambungkan Snowflake
+    result = execute_query(AI_DECISION_QUERY)
 
-    result = {
+    return {
+
         "status": "success",
-        "message": "AI Director service running",
-        "query": AI_DECISION_QUERY
-    }
 
-    return result
+        "total_decisions": len(result),
+
+        "data": result
+
+    }

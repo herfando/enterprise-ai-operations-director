@@ -1,0 +1,30 @@
+# Environment variables (rahasia)
+.env
+.env.*
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Upload / temporary files
+uploads/
+tmp/
+
+# Testing cache
+.pytest_cache/
