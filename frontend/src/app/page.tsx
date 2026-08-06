@@ -5,7 +5,6 @@ import Header from "@/components/Header";
 import HealthCard from "@/components/HealthCard";
 import DepartmentCard from "@/components/DepartmentCard";
 import DecisionPanel from "@/components/DecisionPanel";
-import WorkflowMonitor from "@/components/WorkflowMonitor";
 
 import { departments } from "@/lib/data";
 
@@ -157,8 +156,6 @@ export default function Home() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <DecisionPanel />
-
-          <WorkflowMonitor />
         </div>
 
         <UploadReportModal
