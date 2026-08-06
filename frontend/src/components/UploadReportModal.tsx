@@ -43,18 +43,27 @@ export default function UploadReportModal({ open, onClose }: Props) {
     setStep(2);
   }
 
-  function handleProcessAI() {
+  async function handleProcessAI() {
     if (!file) {
       alert("Please select a file.");
       return;
     }
 
-    console.log({
-      department,
-      file,
+    const formData = new FormData();
+
+    formData.append("department", department);
+    formData.append("file", file);
+
+    const response = await fetch("http://localhost:8000/upload", {
+      method: "POST",
+      body: formData,
     });
 
-    alert("File uploaded. AI Processing started.");
+    const result = await response.json();
+
+    console.log(result);
+
+    alert(`AI Processing Started for ${result.department}`);
 
     resetModal();
   }

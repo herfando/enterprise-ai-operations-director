@@ -1,0 +1,26 @@
+MARKETING ORDER (MO);;;;;;;;;;;;;
+Department: Marketing  |  Fill in the yellow cells following the sample rows below. Do not modify the header row.;;;;;;;;;;;;;
+;;;;;;;;;;;;;
+No;Product Name;"Product Status
+(New/Existing)";Buyer Name;"Buyer Type
+(Individual/Company)";Buyer Address;Order Quantity;Unit;Unit Selling Price;Unit Production Cost;Currency;Payment Date;MO Date;Delivery Date
+1;AquaFresh PET Bottle 330ml;Existing;PT Tirta Mulia Beverage;Company;Jl. Industri Raya No. 45, Cikarang Industrial Estate, Bekasi, West Java;500000;pcs;850;520;IDR;2026-07-20;2026-07-20;2026-08-01
+2;AquaFresh PET Bottle 600ml;Existing;PT Tirta Mulia Beverage;Company;Jl. Industri Raya No. 45, Cikarang Industrial Estate, Bekasi, West Java;350000;pcs;1,100;700;IDR;2026-07-20;2026-07-20;2026-08-03
+3;CrystalPlast PP Cup 220ml;Existing;PT Berkah Minuman Segar;Company;Jl. Raya Serang KM 12, Cikupa, Tangerang, Banten;800000;pcs;320;190;IDR;2026-07-21;2026-07-21;2026-07-28
+4;CrystalPlast PP Cup 240ml;Existing;PT Berkah Minuman Segar;Company;Jl. Raya Serang KM 12, Cikupa, Tangerang, Banten;750000;pcs;340;205;IDR;2026-07-22;2026-07-22;2026-08-05
+5;ClearLine PET Bottle 1500ml;Existing;Toko Sumber Rezeki;Company;Jl. Pasar Baru No. 3, Bandung, Jawa Barat;150000;pcs;1,850;1,220;IDR;2026-07-22;2026-07-22;2026-08-02
+6;ProCup PP Cup 180ml;Existing;Siti Rahmawati;Individual;Jl. Anggrek No. 7, Surabaya, Jawa Timur;200000;pcs;280;165;IDR;2026-07-23;2026-07-23;2026-07-30
+7;ProCup PP Cup 250ml;Existing;PT Wahana Pangan Sejahtera;Company;Jl. Soekarno Hatta No. 100, Semarang, Jawa Tengah;600000;pcs;360;215;IDR;2026-07-23;2026-07-23;2026-08-04
+8;NewLine PP Cup 200ml Sealed;New;PT Sehat Alami Nusantara;Company;Jl. Diponegoro No. 21, Yogyakarta;400000;pcs;310;175;IDR;2026-07-24;2026-07-24;2026-08-10
+9;ClearLine PET Bottle 330ml;Existing;Budi Santoso;Individual;Jl. Kenanga No. 5, Medan, Sumatera Utara;250000;pcs;830;505;IDR;2026-07-24;2026-07-24;2026-08-06
+10;AquaFresh PET Bottle 1500ml;Existing;PT Ritel Nusantara Jaya;Company;Jl. Gatot Subroto No. 88, Palembang, Sumatera Selatan;180000;pcs;1,900;1,250;IDR;2026-07-25;2026-07-25;2026-08-07
+11;PolyPack PP Cup 200ml;Existing;PT Cahaya Minuman Nusantara;Company;Jl. Industri Selatan No. 9, Karawang, Jawa Barat;650000;pcs;300;180;IDR;2026-07-25;2026-07-25;2026-08-06
+12;PolyPack PP Cup 300ml;Existing;PT Cahaya Minuman Nusantara;Company;Jl. Industri Selatan No. 9, Karawang, Jawa Barat;450000;pcs;370;225;IDR;2026-07-26;2026-07-26;2026-08-08
+13;EcoCup PP Cup 220ml Biodegradable;Existing;PT Hijau Lestari Kemasan;Company;Jl. Ki Hajar Dewantara No. 15, Solo, Jawa Tengah;300000;pcs;410;260;IDR;2026-07-26;2026-07-26;2026-08-09
+14;TransParent PET Bottle 500ml;Existing;Rina Kusuma;Individual;Jl. Cendrawasih No. 3, Denpasar, Bali;220000;pcs;950;610;IDR;2026-07-27;2026-07-27;2026-08-05
+15;TransParent PET Bottle 750ml;Existing;PT Segar Alam Beverage;Company;Jl. Raya Sukabumi No. 20, Sukabumi, Jawa Barat;280000;pcs;1,250;800;IDR;2026-07-27;2026-07-27;2026-08-11
+16;FreshSeal PP Cup 250ml Sealed;Existing;PT Wahana Pangan Sejahtera;Company;Jl. Soekarno Hatta No. 100, Semarang, Jawa Tengah;500000;pcs;390;240;IDR;2026-07-28;2026-07-28;2026-08-12
+17;PureBottle PET Bottle 330ml;Existing;CV Anugrah Tirta Sejahtera;Company;Jl. Veteran No. 55, Malang, Jawa Timur;400000;pcs;820;500;IDR;2026-07-28;2026-07-28;2026-08-09
+18;PureBottle PET Bottle 600ml;Existing;CV Anugrah Tirta Sejahtera;Company;Jl. Veteran No. 55, Malang, Jawa Timur;320000;pcs;1,080;690;IDR;2026-07-29;2026-07-29;2026-08-13
+19;AquaFresh PET Bottle 220ml;Existing;Toko Sumber Rezeki;Company;Jl. Pasar Baru No. 3, Bandung, Jawa Barat;600000;pcs;620;390;IDR;2026-07-29;2026-07-29;2026-08-10
+20;CrystalPlast PP Cup 350ml;Existing;PT Berkah Minuman Segar;Company;Jl. Raya Serang KM 12, Cikupa, Tangerang, Banten;380000;pcs;400;245;IDR;2026-07-30;2026-07-30;2026-08-14
