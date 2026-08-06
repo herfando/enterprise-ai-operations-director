@@ -1,11 +1,19 @@
 import os
+from pathlib import Path
+
 import snowflake.connector
 from dotenv import load_dotenv
 
-load_dotenv()
+# ambil .env dari folder backend
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+ENV_PATH = BASE_DIR / "backend" / ".env"
+
+load_dotenv(ENV_PATH)
 
 
 def get_snowflake_connection():
+
     return snowflake.connector.connect(
         user=os.getenv("SNOWFLAKE_USER"),
         password=os.getenv("SNOWFLAKE_PASSWORD"),

@@ -6,6 +6,8 @@ from fastapi import APIRouter, UploadFile, File, Form
 from backend.engine.document_parser_python import parse_python_document
 from backend.engine.document_parser_cortex import parse_cortex_document
 
+from backend.departments.production.controller import save_production_result
+
 router = APIRouter()
 
 
@@ -44,9 +46,20 @@ async def upload_document(file: UploadFile = File(...), department: str = Form(.
 
         return {"status": "error", "message": f"Extension {ext} belum support"}
 
+    # ==========================
+    # SAVE DEPARTMENT DATA
+    # ==========================
+
+    database_result = None
+
+    if department.lower() == "production":
+
+        database_result = save_production_result(result)
+
     return {
         "status": "success",
         "department": department,
         "filename": filename,
+        "database_result": database_result,
         "parser_result": result,
     }
