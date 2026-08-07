@@ -15,6 +15,7 @@ app.add_middleware(
         "http://localhost:3000",
         "http://localhost:5173",
         "https://enterprise-ai-operations-director-q.vercel.app",
+        "https://enterprise-ai-operations-director.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
