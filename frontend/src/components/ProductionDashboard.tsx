@@ -11,7 +11,7 @@ export default function ProductionDashboard() {
   async function fetchDashboard() {
     try {
       const res = await fetch(
-        `http://localhost:8000/production/dashboard?start_date=${startDate}&end_date=${endDate}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/production/dashboard?start_date=${startDate}&end_date=${endDate}`,
       );
 
       const json = await res.json();

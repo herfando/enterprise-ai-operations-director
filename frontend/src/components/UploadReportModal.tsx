@@ -54,7 +54,7 @@ export default function UploadReportModal({ open, onClose }: Props) {
     formData.append("department", department);
     formData.append("file", file);
 
-    const response = await fetch("http://localhost:8000/upload", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/upload`, {
       method: "POST",
       body: formData,
     });
