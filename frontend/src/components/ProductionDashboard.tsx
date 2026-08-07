@@ -14,6 +14,9 @@ export default function ProductionDashboard() {
         `${process.env.NEXT_PUBLIC_API_URL}/production/dashboard?start_date=${startDate}&end_date=${endDate}`,
       );
 
+      console.log("STATUS", res.status);
+      console.log("URL", res.url);
+
       const json = await res.json();
 
       setData(json);
