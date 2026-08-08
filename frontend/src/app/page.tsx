@@ -197,7 +197,10 @@ SIDEBAR
         AI DECISION + WORKFLOW
     ===================================================== */}
 
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        <div
+          id="ai-decisions"
+          className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 items-start"
+        >
           {/* ===================================================
           AI DECISION
       =================================================== */}
