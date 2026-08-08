@@ -4,6 +4,9 @@ from fastapi import APIRouter, Query
 
 from database_snowflake.connection import get_snowflake_connection
 
+from cortex_ai.prompts.production import build_production_decision_prompt
+from cortex_ai.cortex_client import call_cortex_ai
+
 router = APIRouter(prefix="/production", tags=["Production Dashboard"])
 
 
@@ -329,3 +332,41 @@ def production_dashboard(start_date: date = Query(...), end_date: date = Query(.
         cursor.close()
 
         conn.close()
+
+
+# =====================================================
+# AI PRODUCTION DECISION
+# =====================================================
+
+
+@router.get("/decision")
+def production_decision(
+    start_date: date = Query(...),
+    end_date: date = Query(...),
+):
+
+    # Ambil data Production yang SUDAH dianalisis
+    dashboard_data = production_dashboard(
+        start_date=start_date,
+        end_date=end_date,
+    )
+
+    if dashboard_data.get("status") == "empty":
+        return {
+            "status": "empty",
+            "message": "No production data available for AI decision.",
+        }
+
+    # Buat prompt berdasarkan hasil dashboard
+    prompt = build_production_decision_prompt(dashboard_data)
+
+    # Kirim ke Cortex
+    ai_result = call_cortex_ai(prompt)
+
+    return {
+        "status": "success",
+        "department": "Production",
+        "start_date": str(start_date),
+        "end_date": str(end_date),
+        "decision": ai_result,
+    }
