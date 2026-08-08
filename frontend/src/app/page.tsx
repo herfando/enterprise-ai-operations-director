@@ -10,75 +10,78 @@ import WorkflowMonitor from "@/components/WorkflowMonitor";
 import { departments } from "@/lib/data";
 
 import { useState } from "react";
-import type { Department } from "@/lib/data";
 import DepartmentDetail from "@/components/DepartmentDetail";
-
 import UploadReportModal from "@/components/UploadReportModal";
 
 export default function Home() {
   const [selectedDepartment, setSelectedDepartment] = useState<number | null>(
     null,
   );
+
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+
+  const [isWorkflowOpen, setIsWorkflowOpen] = useState(false);
+
+  const selectedDepartmentData =
+    departments.find((dept) => dept.id === selectedDepartment) || null;
+
   return (
     <main className="flex min-h-screen bg-slate-100">
-      {/* Sidebar */}
+      {/* =====================================================
+          SIDEBAR
+      ===================================================== */}
 
       <Sidebar />
 
-      {/* Main Content */}
+      {/* =====================================================
+          MAIN CONTENT
+      ===================================================== */}
 
       <section className="flex-1 p-8">
         <Header />
+
+        {/* =====================================================
+            ENTERPRISE DATA UPLOAD
+        ===================================================== */}
+
         <div className="mb-8">
           <div
             onClick={() => setIsUploadOpen(true)}
             className="
-      bg-white
-      rounded-2xl
-      shadow
-      p-6
-      border
-      cursor-pointer
-      hover:shadow-lg
-      transition-all
-      group
-    "
+              bg-white
+              rounded-2xl
+              shadow
+              p-6
+              border
+              cursor-pointer
+              hover:shadow-lg
+              transition-all
+              group
+            "
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-5">
                 <div
                   className="
-          w-14
-          h-14
-          rounded-xl
-          bg-blue-100
-          flex
-          items-center
-          justify-center
-          text-3xl
-          "
+                    w-14
+                    h-14
+                    rounded-xl
+                    bg-blue-100
+                    flex
+                    items-center
+                    justify-center
+                    text-3xl
+                  "
                 >
                   📂
                 </div>
 
                 <div>
-                  <h3
-                    className="
-            text-xl
-            font-bold
-            text-slate-900
-          "
-                  >
+                  <h3 className="text-xl font-bold text-slate-900">
                     Enterprise Data Upload
                   </h3>
 
-                  <p
-                    className="
-            text-slate-500
-            mt-1
-          "
-                  >
+                  <p className="text-slate-500 mt-1">
                     Upload department operational data and let AI analyze
                     business performance
                   </p>
@@ -87,15 +90,15 @@ export default function Home() {
 
               <div
                 className="
-        bg-blue-600
-        text-white
-        px-5
-        py-3
-        rounded-xl
-        font-semibold
-        group-hover:bg-blue-700
-        transition
-        "
+                  bg-blue-600
+                  text-white
+                  px-5
+                  py-3
+                  rounded-xl
+                  font-semibold
+                  group-hover:bg-blue-700
+                  transition
+                "
               >
                 + Upload Report
               </div>
@@ -103,7 +106,9 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Company Overview */}
+        {/* =====================================================
+            COMPANY OVERVIEW
+        ===================================================== */}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <HealthCard />
@@ -125,11 +130,22 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Department Intelligence */}
+        {/* =====================================================
+            DEPARTMENT INTELLIGENCE
+        ===================================================== */}
 
         <h2 className="text-2xl font-bold mb-4">Department Intelligence</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div
+          className="
+            grid
+            grid-cols-1
+            md:grid-cols-2
+            lg:grid-cols-5
+            gap-4
+            mb-8
+          "
+        >
           {departments.map((department) => (
             <DepartmentCard
               key={department.id}
@@ -147,18 +163,45 @@ export default function Home() {
             />
           ))}
         </div>
-        <DepartmentDetail
-          department={
-            departments.find((dept) => dept.id === selectedDepartment) || null
-          }
-        />
 
-        {/* AI Decision + Workflow */}
+        {/* =====================================================
+            DEPARTMENT DETAIL
+        ===================================================== */}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <DecisionPanel />
-          <WorkflowMonitor />
+        <DepartmentDetail department={selectedDepartmentData} />
+
+        {/* =====================================================
+            AI DECISION + WORKFLOW
+        ===================================================== */}
+
+        <div
+          id="ai-decisions"
+          className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 items-start"
+        >
+          {/* ===================================================
+              AI DECISION
+          =================================================== */}
+
+          <DecisionPanel onExecuteWorkflow={() => setIsWorkflowOpen(true)} />
+
+          {/* ===================================================
+              WORKFLOW MONITOR
+          =================================================== */}
+          {isWorkflowOpen ? (
+            <div id="workflows">
+              <WorkflowMonitor
+                visible={isWorkflowOpen}
+                onClose={() => setIsWorkflowOpen(false)}
+              />
+            </div>
+          ) : (
+            <div className="hidden lg:block" />
+          )}
         </div>
+
+        {/* =====================================================
+            UPLOAD MODAL
+        ===================================================== */}
 
         <UploadReportModal
           open={isUploadOpen}
