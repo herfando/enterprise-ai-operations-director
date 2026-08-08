@@ -12,6 +12,8 @@ app = FastAPI(title="Enterprise AI Operations Director")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:5173",
         "https://enterprise-ai-operations-director.vercel.app",
         "https://enterprise-ai-operations-director-q.vercel.app",
         "https://enterprise-ai-operations-director-q9dt-4ir3snllq.vercel.app",
