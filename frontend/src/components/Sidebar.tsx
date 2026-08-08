@@ -1,6 +1,6 @@
 export default function Sidebar() {
   return (
-    <aside className="sticky top-0 h-screen w-64 min-h-screen bg-slate-900 text-white p-6">
+    <aside className="sticky top-0 h-screen w-64 bg-slate-900 text-white p-6">
       <h1 className="text-xl font-bold mb-8">AI Operations Director</h1>
 
       <nav className="space-y-4 flex flex-col">

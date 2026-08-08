@@ -8,7 +8,7 @@ type Props = {
 export default function DepartmentDetail({ department }: Props) {
   if (!department) {
     return (
-      <div className="bg-white rounded-xl shadow p-6 mt-6">
+      <div className="bg-white rounded-xl shadow p-6 my-6">
         <p className="text-slate-500">
           Select a department to view intelligence detail
         </p>
