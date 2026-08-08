@@ -1,20 +1,28 @@
 import os
 
-from fastapi import APIRouter, UploadFile, File, Form
-
+from fastapi import (
+    APIRouter,
+    UploadFile,
+    File,
+    Form,
+)
 
 from backend.engine.document_parser_python import parse_python_document
+
 from backend.engine.document_parser_cortex import parse_cortex_document
 
 from backend.departments.production.controller import save_production_result
 
 router = APIRouter()
 
-
 TEMP_FOLDER = "backend/temp"
 
-
 os.makedirs(TEMP_FOLDER, exist_ok=True)
+
+
+# =====================================================
+# UPLOAD DOCUMENT
+# =====================================================
 
 
 @router.post("/upload")
@@ -24,37 +32,92 @@ async def upload_document(file: UploadFile = File(...), department: str = Form(.
 
     file_path = os.path.join(TEMP_FOLDER, filename)
 
-    # simpan file sementara
+    # =================================================
+    # SAVE TEMPORARY FILE
+    # =================================================
+
     with open(file_path, "wb") as buffer:
+
         buffer.write(await file.read())
+
+    # =================================================
+    # DETECT FILE EXTENSION
+    # =================================================
 
     ext = filename.lower().split(".")[-1]
 
-    # ==========================
+    # =================================================
     # ROUTE PARSER
-    # ==========================
+    # =================================================
 
-    if ext in ["xlsx", "csv"]:
+    if ext in [
+        "xlsx",
+        "csv",
+    ]:
 
         result = parse_python_document(file_path, filename)
 
-    elif ext in ["pdf", "png", "jpg", "jpeg"]:
+    elif ext in [
+        "pdf",
+        "png",
+        "jpg",
+        "jpeg",
+    ]:
 
         result = parse_cortex_document(file_path, filename)
 
     else:
 
-        return {"status": "error", "message": f"Extension {ext} belum support"}
+        return {
+            "status": "error",
+            "error_type": "UNSUPPORTED_FILE",
+            "message": (f"File type '.{ext}' " "is not supported."),
+            "expected": [
+                "xlsx",
+                "csv",
+                "pdf",
+                "png",
+                "jpg",
+                "jpeg",
+            ],
+        }
 
-    # ==========================
-    # SAVE DEPARTMENT DATA
-    # ==========================
-
-    database_result = None
+    # =================================================
+    # DEPARTMENT ROUTING
+    # =================================================
 
     if department.lower() == "production":
 
         database_result = save_production_result(result)
+
+    else:
+
+        database_result = {
+            "status": "not_connected",
+            "message": (
+                f"Database saving for " f"{department} is not implemented yet."
+            ),
+        }
+
+    # =================================================
+    # HANDLE PRODUCTION VALIDATION ERROR
+    # =================================================
+
+    if isinstance(database_result, dict) and database_result.get("valid") is False:
+
+        return {
+            "status": "error",
+            "department": department,
+            "filename": filename,
+            "error_type": database_result.get("error_type"),
+            "message": database_result.get("message"),
+            "expected": database_result.get("expected"),
+            "details": database_result.get("details", []),
+        }
+
+    # =================================================
+    # SUCCESS RESPONSE
+    # =================================================
 
     return {
         "status": "success",

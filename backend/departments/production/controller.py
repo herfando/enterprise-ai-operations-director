@@ -1,7 +1,27 @@
 from database_snowflake.connection import get_snowflake_connection
 
+from backend.departments.production.rules import validate_production_document
+
+# =====================================================
+# SAVE PRODUCTION RESULT
+# =====================================================
+
 
 def save_production_result(parser_result):
+
+    # -------------------------------------------------
+    # VALIDATE PRODUCTION DOCUMENT
+    # -------------------------------------------------
+
+    validation = validate_production_document(parser_result)
+
+    if not validation["valid"]:
+
+        return validation
+
+    # -------------------------------------------------
+    # DATABASE CONNECTION
+    # -------------------------------------------------
 
     conn = get_snowflake_connection()
     cursor = conn.cursor()
@@ -13,9 +33,9 @@ def save_production_result(parser_result):
         inserted = 0
         skipped = 0
 
-        # =====================================================
+        # -------------------------------------------------
         # DUPLICATE CHECK
-        # =====================================================
+        # -------------------------------------------------
 
         check_sql = """
             SELECT COUNT(*)
@@ -39,6 +59,10 @@ def save_production_result(parser_result):
                 AND TARGET_STATUS = %s
         """
 
+        # -------------------------------------------------
+        # INSERT SQL
+        # -------------------------------------------------
+
         insert_sql = """
             INSERT INTO DATABASE_SNOWFLAKE.MASTER_DATA.PRODUCTION_RESULT
             (
@@ -61,20 +85,21 @@ def save_production_result(parser_result):
             )
             VALUES
             (
-                %s,%s,%s,%s,
-                %s,%s,%s,%s,
-                %s,%s,%s,%s,
-                %s,%s,%s,%s
+                %s, %s, %s, %s,
+                %s, %s, %s, %s,
+                %s, %s, %s, %s,
+                %s, %s, %s, %s
             )
         """
 
-        # =====================================================
-        # PROCESS ROWS
-        # =====================================================
+        # -------------------------------------------------
+        # PROCESS EACH ROW
+        # -------------------------------------------------
 
         for row in rows:
 
-            # Skip instruksi/header
+            # Skip header / instruction rows
+
             if not isinstance(row.get("DATA HASIL PRODUKSI"), int):
                 continue
 
@@ -97,9 +122,9 @@ def save_production_result(parser_result):
                 row["Unnamed: 16"],
             )
 
-            # =================================================
-            # CHECK DATABASE
-            # =================================================
+            # -------------------------------------------------
+            # CHECK IDENTICAL RECORD
+            # -------------------------------------------------
 
             cursor.execute(check_sql, values)
 
@@ -107,18 +132,27 @@ def save_production_result(parser_result):
 
             existing_count = result[0] if result else 0
 
+            # -------------------------------------------------
+            # SKIP DUPLICATE
+            # -------------------------------------------------
+
             if existing_count > 0:
 
                 skipped += 1
+
                 continue
 
-            # =================================================
+            # -------------------------------------------------
             # INSERT NEW RECORD
-            # =================================================
+            # -------------------------------------------------
 
             cursor.execute(insert_sql, values)
 
             inserted += 1
+
+        # -------------------------------------------------
+        # COMMIT
+        # -------------------------------------------------
 
         conn.commit()
 
@@ -126,7 +160,12 @@ def save_production_result(parser_result):
             "status": "success",
             "inserted_rows": inserted,
             "skipped_duplicates": skipped,
+            "total_processed": (inserted + skipped),
         }
+
+    # -------------------------------------------------
+    # DATABASE ERROR
+    # -------------------------------------------------
 
     except Exception as e:
 
@@ -136,6 +175,10 @@ def save_production_result(parser_result):
             "status": "failed",
             "error": str(e),
         }
+
+    # -------------------------------------------------
+    # CLOSE CONNECTION
+    # -------------------------------------------------
 
     finally:
 
