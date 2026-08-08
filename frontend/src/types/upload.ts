@@ -11,6 +11,23 @@ export type UploadResult = {
     expected?: string | string[];
     details?: string[];
 
+    ai_summary?: {
+        title?: string;
+        message?: string;
+        detected_text?: string;
+    };
+
+    cortex_content?: {
+        content?: string;
+
+        metadata?: {
+            pageCount?: number;
+            [key: string]: unknown;
+        };
+
+        [key: string]: unknown;
+    };
+
     database_result?: {
         status?: string;
         inserted_rows?: number;
@@ -19,4 +36,15 @@ export type UploadResult = {
         message?: string;
         error?: string;
     };
+};
+
+export type UploadModalProps = {
+    open: boolean;
+    onClose: () => void;
+};
+
+export type FeedbackModalProps = {
+    open: boolean;
+    onClose: () => void;
+    result: UploadResult | null;
 };
