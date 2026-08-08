@@ -12,16 +12,15 @@ export default function Sidebar() {
           Departments
         </a>
 
+        <a href="#analytics" className="hover:text-blue-400 cursor-pointer">
+          Analytics
+        </a>
         <a href="#ai-decisions" className="hover:text-blue-400 cursor-pointer">
           AI Decisions
         </a>
 
         <a href="#workflows" className="hover:text-blue-400 cursor-pointer">
           Workflows
-        </a>
-
-        <a href="#analytics" className="hover:text-blue-400 cursor-pointer">
-          Analytics
         </a>
       </nav>
     </aside>
