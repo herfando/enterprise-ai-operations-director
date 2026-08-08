@@ -2,7 +2,10 @@ import { aiDecision } from "@/lib/data";
 
 export default function DecisionPanel() {
   return (
-    <div className="bg-white rounded-xl shadow p-6 border">
+    <section
+      id="ai-decisions"
+      className="bg-white rounded-xl shadow p-6 border"
+    >
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold text-slate-900">
           🧠 AI Decision Center
@@ -65,6 +68,6 @@ export default function DecisionPanel() {
           Execute Workflow
         </button>
       </div>
-    </div>
+    </section>
   );
 }

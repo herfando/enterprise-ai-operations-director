@@ -19,7 +19,7 @@ export default function DepartmentDetail({ department }: Props) {
   const isProduction = department.name === "Production";
 
   return (
-    <div className="bg-white rounded-xl shadow p-6 mt-6">
+    <section id="analytics" className="bg-white rounded-xl shadow p-6 mt-6">
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
         <div>
@@ -130,6 +130,6 @@ export default function DepartmentDetail({ department }: Props) {
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 }

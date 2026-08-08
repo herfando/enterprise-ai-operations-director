@@ -33,9 +33,10 @@ export default function DepartmentCard({
         : "text-green-600";
 
   return (
-    <div
+    <section
+      id="departments"
       onClick={onClick}
-      className={`
+      className={` scroll-mt-20
         bg-white
         rounded-xl
         shadow
@@ -93,6 +94,6 @@ export default function DepartmentCard({
           {risk}
         </span>
       </div>
-    </div>
+    </section>
   );
 }
