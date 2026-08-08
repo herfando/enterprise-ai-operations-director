@@ -219,8 +219,14 @@ export default function DecisionPanel({
             <h2 className="text-xl font-bold text-slate-900">
               AI Decision Center
             </h2>
+            <p className="text-xs text-slate-500">
+              {result.department ?? "Production"} • Cortex AI
+            </p>
 
-            <p className="text-xs text-slate-500">Production • Cortex AI</p>
+            <p className="mt-1 text-xs font-medium text-slate-400">
+              Analysis Period: {result.start_date ?? "—"} –{" "}
+              {result.end_date ?? "—"}
+            </p>
           </div>
         </div>
 
