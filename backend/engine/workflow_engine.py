@@ -7,17 +7,26 @@ from fastapi import (
     Form,
 )
 
-from backend.engine.document_parser_python import parse_python_document
+from backend.engine.document_parser_python import (
+    parse_python_document,
+)
 
-from backend.engine.document_parser_cortex import parse_cortex_document
+from backend.engine.document_parser_cortex import (
+    parse_cortex_document,
+)
 
-from backend.departments.production.controller import save_production_result
+from backend.departments.production.controller import (
+    save_production_result,
+)
 
 router = APIRouter()
 
 TEMP_FOLDER = "backend/temp"
 
-os.makedirs(TEMP_FOLDER, exist_ok=True)
+os.makedirs(
+    TEMP_FOLDER,
+    exist_ok=True,
+)
 
 
 # =====================================================
@@ -26,17 +35,26 @@ os.makedirs(TEMP_FOLDER, exist_ok=True)
 
 
 @router.post("/upload")
-async def upload_document(file: UploadFile = File(...), department: str = Form(...)):
+async def upload_document(
+    file: UploadFile = File(...),
+    department: str = Form(...),
+):
 
     filename = file.filename
 
-    file_path = os.path.join(TEMP_FOLDER, filename)
+    file_path = os.path.join(
+        TEMP_FOLDER,
+        filename,
+    )
 
     # =================================================
     # SAVE TEMPORARY FILE
     # =================================================
 
-    with open(file_path, "wb") as buffer:
+    with open(
+        file_path,
+        "wb",
+    ) as buffer:
 
         buffer.write(await file.read())
 
@@ -47,15 +65,25 @@ async def upload_document(file: UploadFile = File(...), department: str = Form(.
     ext = filename.lower().split(".")[-1]
 
     # =================================================
-    # ROUTE PARSER
+    # ROUTE TO PARSER
+    #
+    # Python parser:
+    # XLSX / CSV / PPTX
+    #
+    # Cortex parser:
+    # PDF / PNG / JPG / JPEG
     # =================================================
 
     if ext in [
         "xlsx",
         "csv",
+        "pptx",
     ]:
 
-        result = parse_python_document(file_path, filename)
+        result = parse_python_document(
+            file_path,
+            filename,
+        )
 
     elif ext in [
         "pdf",
@@ -64,7 +92,10 @@ async def upload_document(file: UploadFile = File(...), department: str = Form(.
         "jpeg",
     ]:
 
-        result = parse_cortex_document(file_path, filename)
+        result = parse_cortex_document(
+            file_path,
+            filename,
+        )
 
     else:
 
@@ -75,6 +106,7 @@ async def upload_document(file: UploadFile = File(...), department: str = Form(.
             "expected": [
                 "xlsx",
                 "csv",
+                "pptx",
                 "pdf",
                 "png",
                 "jpg",
@@ -94,9 +126,7 @@ async def upload_document(file: UploadFile = File(...), department: str = Form(.
 
         database_result = {
             "status": "not_connected",
-            "message": (
-                f"Database saving for " f"{department} is not implemented yet."
-            ),
+            "message": (f"Database saving for {department} " "is not implemented yet."),
         }
 
     # =================================================
@@ -112,7 +142,12 @@ async def upload_document(file: UploadFile = File(...), department: str = Form(.
             "error_type": database_result.get("error_type"),
             "message": database_result.get("message"),
             "expected": database_result.get("expected"),
-            "details": database_result.get("details", []),
+            "details": database_result.get(
+                "details",
+                [],
+            ),
+            "ai_summary": database_result.get("ai_summary"),
+            "cortex_content": database_result.get("cortex_content"),
         }
 
     # =================================================
