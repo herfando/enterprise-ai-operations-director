@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 
+import FeedbackModal from "./FeedbackModal";
+import { UploadResult } from "@/types/upload";
+
 type Props = {
   open: boolean;
   onClose: () => void;
@@ -25,7 +28,25 @@ export default function UploadReportModal({ open, onClose }: Props) {
   const [department, setDepartment] = useState("");
   const [file, setFile] = useState<File | null>(null);
 
-  if (!open) return null;
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [uploadResult, setUploadResult] = useState<UploadResult | null>(null);
+
+  if (!open) {
+    return (
+      <>
+        {uploadResult && (
+          <FeedbackModal
+            open={feedbackOpen}
+            onClose={() => {
+              setFeedbackOpen(false);
+              setUploadResult(null);
+            }}
+            result={uploadResult}
+          />
+        )}
+      </>
+    );
+  }
 
   function resetModal() {
     setStep(1);
@@ -36,7 +57,6 @@ export default function UploadReportModal({ open, onClose }: Props) {
 
   function handleContinue() {
     if (!department) {
-      alert("Please select a department.");
       return;
     }
 
@@ -45,140 +65,186 @@ export default function UploadReportModal({ open, onClose }: Props) {
 
   async function handleProcessAI() {
     if (!file) {
-      alert("Please select a file.");
       return;
     }
 
-    const formData = new FormData();
+    try {
+      const formData = new FormData();
 
-    formData.append("department", department);
-    formData.append("file", file);
+      formData.append("department", department);
+      formData.append("file", file);
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/upload`, {
-      method: "POST",
-      body: formData,
-    });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/upload`,
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
 
-    const result = await response.json();
+      const result: UploadResult = await response.json();
 
-    console.log(result);
+      console.log(result);
 
-    alert(`AI Processing Started for ${result.department}`);
+      setUploadResult(result);
 
-    resetModal();
+      resetModal();
+
+      setFeedbackOpen(true);
+    } catch (error) {
+      console.error(error);
+
+      setUploadResult({
+        status: "failed",
+        message: "Failed to connect to backend.",
+        details: [
+          "Please check the backend server.",
+          "Please check the API connection.",
+        ],
+      });
+
+      resetModal();
+
+      setFeedbackOpen(true);
+    }
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-8">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">Upload Department Report</h2>
+    <>
+      {/* UPLOAD MODAL */}
 
-          <button onClick={resetModal} className="text-2xl">
-            ✕
-          </button>
-        </div>
+      <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/50">
+        <div className="w-full max-w-2xl rounded-2xl bg-white p-8 shadow-xl">
+          {/* HEADER */}
 
-        {/* STEP 1 */}
+          <div className="mb-8 flex items-center justify-between">
+            <h2 className="text-2xl font-bold">Upload Department Report</h2>
 
-        {step === 1 && (
-          <>
-            <p className="text-slate-500 mb-5">
-              Select the department that owns this report.
-            </p>
-
-            <select
-              className="w-full border rounded-lg p-3"
-              value={department}
-              onChange={(e) => setDepartment(e.target.value)}
+            <button
+              type="button"
+              onClick={resetModal}
+              className="text-2xl text-slate-400 hover:text-slate-700"
             >
-              <option value="">Select Department</option>
+              ✕
+            </button>
+          </div>
 
-              {departments.map((dept) => (
-                <option key={dept} value={dept}>
-                  {dept}
-                </option>
-              ))}
-            </select>
+          {/* STEP 1 */}
 
-            <div className="flex justify-end mt-8">
-              <button
-                onClick={handleContinue}
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg"
-              >
-                Continue →
-              </button>
-            </div>
-          </>
-        )}
-
-        {/* STEP 2 */}
-
-        {step === 2 && (
-          <>
-            <div className="mb-5">
-              <p className="text-sm text-slate-500">Department</p>
-
-              <h3 className="text-xl font-bold">{department}</h3>
-            </div>
-
-            <label
-              className="
-              border-2
-              border-dashed
-              rounded-xl
-              p-12
-              flex
-              flex-col
-              items-center
-              justify-center
-              cursor-pointer
-              hover:bg-slate-50
-              transition
-              "
-            >
-              <input
-                type="file"
-                className="hidden"
-                accept=".xlsx,.xls,.csv,.pdf,.png,.jpg,.jpeg"
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
-              />
-
-              <p className="text-lg font-semibold">Drag & Drop File</p>
-
-              <p className="text-slate-500 mt-2">or click to browse</p>
-
-              <p className="text-sm mt-5 text-slate-400">
-                Excel • CSV • PDF • Image
+          {step === 1 && (
+            <>
+              <p className="mb-5 text-slate-500">
+                Select the department that owns this report.
               </p>
-            </label>
 
-            {file && (
-              <div className="mt-5 bg-slate-100 rounded-lg p-4">
-                <p className="font-semibold">Selected File</p>
+              <select
+                className="w-full rounded-lg border p-3"
+                value={department}
+                onChange={(e) => setDepartment(e.target.value)}
+              >
+                <option value="">Select Department</option>
 
-                <p>{file.name}</p>
+                {departments.map((dept) => (
+                  <option key={dept} value={dept}>
+                    {dept}
+                  </option>
+                ))}
+              </select>
+
+              <div className="mt-8 flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleContinue}
+                  className="rounded-lg bg-blue-600 px-6 py-3 text-white"
+                >
+                  Continue →
+                </button>
               </div>
-            )}
+            </>
+          )}
 
-            <div className="flex justify-between mt-8">
-              <button
-                onClick={() => setStep(1)}
-                className="border px-6 py-3 rounded-lg"
-              >
-                ← Back
-              </button>
+          {/* STEP 2 */}
 
-              <button
-                onClick={handleProcessAI}
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg"
+          {step === 2 && (
+            <>
+              <div className="mb-5">
+                <p className="text-sm text-slate-500">Department</p>
+
+                <h3 className="text-xl font-bold">{department}</h3>
+              </div>
+
+              <label
+                className="
+                  flex
+                  cursor-pointer
+                  flex-col
+                  items-center
+                  justify-center
+                  rounded-xl
+                  border-2
+                  border-dashed
+                  p-12
+                  hover:bg-slate-50
+                "
               >
-                Process With AI
-              </button>
-            </div>
-          </>
-        )}
+                <input
+                  type="file"
+                  className="hidden"
+                  accept=".xlsx,.xls,.csv,.pdf,.png,.jpg,.jpeg"
+                  onChange={(e) => setFile(e.target.files?.[0] || null)}
+                />
+
+                <p className="text-lg font-semibold">Drag & Drop File</p>
+
+                <p className="mt-2 text-slate-500">or click to browse</p>
+
+                <p className="mt-5 text-sm text-slate-400">
+                  Excel • CSV • PDF • Image
+                </p>
+              </label>
+
+              {file && (
+                <div className="mt-5 rounded-lg bg-slate-100 p-4">
+                  <p className="font-semibold">Selected File</p>
+
+                  <p>{file.name}</p>
+                </div>
+              )}
+
+              <div className="mt-8 flex justify-between">
+                <button
+                  type="button"
+                  onClick={() => setStep(1)}
+                  className="rounded-lg border px-6 py-3"
+                >
+                  ← Back
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleProcessAI}
+                  className="rounded-lg bg-blue-600 px-6 py-3 text-white"
+                >
+                  Process With AI
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+
+      {/* FEEDBACK MODAL */}
+
+      {uploadResult && (
+        <FeedbackModal
+          open={feedbackOpen}
+          onClose={() => {
+            setFeedbackOpen(false);
+            setUploadResult(null);
+          }}
+          result={uploadResult}
+        />
+      )}
+    </>
   );
 }
