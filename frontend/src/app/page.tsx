@@ -20,58 +20,81 @@ export default function Home() {
 
   const [isUploadOpen, setIsUploadOpen] = useState(false);
 
+  // Workflow state
   const [isWorkflowOpen, setIsWorkflowOpen] = useState(false);
+  const [hasWorkflowStarted, setHasWorkflowStarted] = useState(false);
 
   const selectedDepartmentData =
     departments.find((dept) => dept.id === selectedDepartment) || null;
 
+  const handleExecuteWorkflow = () => {
+    setHasWorkflowStarted(true);
+    setIsWorkflowOpen(true);
+
+    setTimeout(() => {
+      document.getElementById("workflows")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+  };
+
+  const handleOpenWorkflow = () => {
+    setIsWorkflowOpen(true);
+
+    setTimeout(() => {
+      document.getElementById("workflows")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+  };
+
   return (
     <main className="flex min-h-screen bg-slate-100">
       {/* =====================================================
-          SIDEBAR
-      ===================================================== */}
-
+SIDEBAR
+===================================================== */}
+      ```
       <Sidebar />
-
       {/* =====================================================
-          MAIN CONTENT
-      ===================================================== */}
-
+      MAIN CONTENT
+  ===================================================== */}
       <section className="flex-1 p-8">
         <Header />
 
         {/* =====================================================
-            ENTERPRISE DATA UPLOAD
-        ===================================================== */}
+        ENTERPRISE DATA UPLOAD
+    ===================================================== */}
 
         <div className="mb-8">
           <div
             onClick={() => setIsUploadOpen(true)}
             className="
-              bg-white
-              rounded-2xl
-              shadow
-              p-6
-              border
-              cursor-pointer
-              hover:shadow-lg
-              transition-all
-              group
-            "
+          bg-white
+          rounded-2xl
+          shadow
+          p-6
+          border
+          cursor-pointer
+          hover:shadow-lg
+          transition-all
+          group
+        "
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-5">
                 <div
                   className="
-                    w-14
-                    h-14
-                    rounded-xl
-                    bg-blue-100
-                    flex
-                    items-center
-                    justify-center
-                    text-3xl
-                  "
+                w-14
+                h-14
+                rounded-xl
+                bg-blue-100
+                flex
+                items-center
+                justify-center
+                text-3xl
+              "
                 >
                   📂
                 </div>
@@ -90,15 +113,15 @@ export default function Home() {
 
               <div
                 className="
-                  bg-blue-600
-                  text-white
-                  px-5
-                  py-3
-                  rounded-xl
-                  font-semibold
-                  group-hover:bg-blue-700
-                  transition
-                "
+              bg-blue-600
+              text-white
+              px-5
+              py-3
+              rounded-xl
+              font-semibold
+              group-hover:bg-blue-700
+              transition
+            "
               >
                 + Upload Report
               </div>
@@ -107,8 +130,8 @@ export default function Home() {
         </div>
 
         {/* =====================================================
-            COMPANY OVERVIEW
-        ===================================================== */}
+        COMPANY OVERVIEW
+    ===================================================== */}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <HealthCard />
@@ -131,20 +154,20 @@ export default function Home() {
         </div>
 
         {/* =====================================================
-            DEPARTMENT INTELLIGENCE
-        ===================================================== */}
+        DEPARTMENT INTELLIGENCE
+    ===================================================== */}
 
         <h2 className="text-2xl font-bold mb-4">Department Intelligence</h2>
 
         <div
           className="
-            grid
-            grid-cols-1
-            md:grid-cols-2
-            lg:grid-cols-5
-            gap-4
-            mb-8
-          "
+        grid
+        grid-cols-1
+        md:grid-cols-2
+        lg:grid-cols-5
+        gap-4
+        mb-8
+      "
         >
           {departments.map((department) => (
             <DepartmentCard
@@ -165,43 +188,85 @@ export default function Home() {
         </div>
 
         {/* =====================================================
-            DEPARTMENT DETAIL
-        ===================================================== */}
+        DEPARTMENT DETAIL
+    ===================================================== */}
 
         <DepartmentDetail department={selectedDepartmentData} />
 
         {/* =====================================================
-            AI DECISION + WORKFLOW
-        ===================================================== */}
+        AI DECISION + WORKFLOW
+    ===================================================== */}
 
-        <div
-          id="ai-decisions"
-          className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 items-start"
-        >
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           {/* ===================================================
-              AI DECISION
-          =================================================== */}
+          AI DECISION
+      =================================================== */}
 
-          <DecisionPanel onExecuteWorkflow={() => setIsWorkflowOpen(true)} />
+          <DecisionPanel onExecuteWorkflow={handleExecuteWorkflow} />
 
           {/* ===================================================
-              WORKFLOW MONITOR
-          =================================================== */}
-          {isWorkflowOpen ? (
-            <div id="workflows">
+          WORKFLOW
+      =================================================== */}
+
+          <div id="workflows" className="w-full">
+            {/* BELUM PERNAH EXECUTE */}
+            {!hasWorkflowStarted ? (
+              <div className="min-h-25" />
+            ) : isWorkflowOpen ? (
+              /* SUDAH EXECUTE + TERBUKA */
               <WorkflowMonitor
-                visible={isWorkflowOpen}
+                visible={true}
                 onClose={() => setIsWorkflowOpen(false)}
               />
-            </div>
-          ) : (
-            <div className="hidden lg:block" />
-          )}
+            ) : (
+              /* SUDAH EXECUTE + DITUTUP */
+              <button
+                type="button"
+                onClick={handleOpenWorkflow}
+                className="cursor-pointer
+              w-full
+              rounded-2xl
+              border
+              bg-white
+              p-6
+              text-left
+              shadow
+              transition
+              hover:shadow-lg
+            "
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <h2 className="text-xl font-bold text-slate-900">
+                      Workflow Monitor
+                    </h2>
+
+                    <p className="mt-2 text-sm text-slate-500">
+                      Workflow is currently closed.
+                    </p>
+                  </div>
+
+                  <span
+                    className="
+                  rounded-lg
+                  bg-blue-600
+                  px-4
+                  py-2
+                  font-semibold
+                  text-white
+                "
+                  >
+                    Open Workflow
+                  </span>
+                </div>
+              </button>
+            )}
+          </div>
         </div>
 
         {/* =====================================================
-            UPLOAD MODAL
-        ===================================================== */}
+        UPLOAD MODAL
+    ===================================================== */}
 
         <UploadReportModal
           open={isUploadOpen}

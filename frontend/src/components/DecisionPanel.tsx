@@ -393,7 +393,7 @@ export default function DecisionPanel({
             });
           }, 100);
         }}
-        className="mt-6 w-full rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-700"
+        className="cursor-pointer mt-6 w-full rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-700"
       >
         Execute Workflow
       </button>

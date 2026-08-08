@@ -29,7 +29,7 @@ export default function WorkflowMonitor({
         </div>
         <button
           onClick={onClose}
-          className="text-slate-400 hover:text-slate-700 text-xl"
+          className="text-slate-400 cursor-pointer hover:text-slate-700 text-xl"
         >
           ×
         </button>
