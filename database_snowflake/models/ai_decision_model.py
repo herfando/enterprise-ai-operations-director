@@ -1,14 +1,18 @@
-from sqlalchemy import Column, Integer, String, Float, Date, DateTime, JSON
 from datetime import datetime
+
+from sqlalchemy import Column, Integer, String, Float, Date, DateTime
 
 from database_snowflake.base import Base
 
 
 class AIDecision(Base):
-
     __tablename__ = "AI_DECISIONS"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(
+        Integer,
+        primary_key=True,
+        autoincrement=True,
+    )
 
     department = Column(String)
 
@@ -25,12 +29,12 @@ class AIDecision(Base):
     primary_problem = Column(String)
     why_first = Column(String)
 
-    evidence = Column(JSON)
+    evidence = Column(String)
 
     business_impact = Column(String)
 
-    immediate_actions = Column(JSON)
-    follow_up_actions = Column(JSON)
+    immediate_actions = Column(String)
+    follow_up_actions = Column(String)
 
     recommendation = Column(String)
     expected_impact = Column(String)
