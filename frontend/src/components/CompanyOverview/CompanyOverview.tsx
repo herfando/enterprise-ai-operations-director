@@ -1,6 +1,6 @@
 "use client";
 
-import HealthCard from "@/components/HealthCard";
+import HealthCard from "@/components/CompanyOverview/HealthCard";
 
 export default function CompanyOverview() {
   return (

@@ -1,5 +1,5 @@
 import type { Department } from "@/lib/data";
-import ProductionDashboard from "@/components/ProductionDashboard";
+import ProductionDashboard from "@/components/CompanyOverview/ProductionDashboard";
 
 type Props = {
   department: Department | null;

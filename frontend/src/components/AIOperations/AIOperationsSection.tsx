@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import DecisionPanel from "@/components/DecisionPanel";
-import WorkflowMonitor from "@/components/WorkflowMonitor";
+import DecisionPanel from "@/components/AIOperations/DecisionPanel";
+import WorkflowMonitor from "@/components/AIOperations/WorkflowMonitor";
 
 export default function AIOperationsSection() {
   const [isWorkflowOpen, setIsWorkflowOpen] = useState(false);

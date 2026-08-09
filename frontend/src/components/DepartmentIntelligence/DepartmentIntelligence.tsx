@@ -4,8 +4,8 @@ import { useState } from "react";
 
 import { departments } from "@/lib/data";
 
-import DepartmentCard from "@/components/DepartmentCard";
-import DepartmentDetail from "@/components/DepartmentDetail";
+import DepartmentCard from "@/components/DepartmentIntelligence/DepartmentCard";
+import DepartmentDetail from "@/components/DepartmentIntelligence/DepartmentDetail";
 
 export default function DepartmentIntelligence() {
   const [selectedDepartment, setSelectedDepartment] = useState<number | null>(

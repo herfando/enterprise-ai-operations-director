@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import UploadReportModal from "@/components/UploadReportModal";
+import UploadReportModal from "@/components/EnterpriseDataUpload/UploadReportModal";
 
 export default function EnterpriseDataUpload() {
   const [isUploadOpen, setIsUploadOpen] = useState(false);
