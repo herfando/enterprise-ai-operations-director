@@ -5,3 +5,5 @@ pandas
 openpyxl
 snowflake-connector-python
 python-dotenv
+sqlalchemy
+snowflake-sqlalchemy
