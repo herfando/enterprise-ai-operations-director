@@ -7,6 +7,7 @@ from database_snowflake.base import Base
 
 class AIDecision(Base):
     __tablename__ = "AI_DECISIONS"
+    __table_args__ = {"schema": "AI_DECISIONS"}
 
     id = Column(
         Integer,
