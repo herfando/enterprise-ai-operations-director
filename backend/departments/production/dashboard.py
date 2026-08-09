@@ -386,11 +386,9 @@ def save_ai_decision(
     start_date,
     end_date,
 ):
-
     session = SessionLocal()
 
     try:
-
         ai_decision = AIDecision(
             department=department,
             start_date=start_date,
@@ -402,18 +400,24 @@ def save_ai_decision(
             executive_summary=decision_data.get("executive_summary"),
             primary_problem=decision_data.get("primary_problem"),
             why_first=decision_data.get("why_first"),
-            evidence=decision_data.get(
-                "evidence",
-                [],
+            evidence=json.dumps(
+                decision_data.get(
+                    "evidence",
+                    [],
+                )
             ),
             business_impact=decision_data.get("business_impact"),
-            immediate_actions=decision_data.get(
-                "immediate_actions",
-                [],
+            immediate_actions=json.dumps(
+                decision_data.get(
+                    "immediate_actions",
+                    [],
+                )
             ),
-            follow_up_actions=decision_data.get(
-                "follow_up_actions",
-                [],
+            follow_up_actions=json.dumps(
+                decision_data.get(
+                    "follow_up_actions",
+                    [],
+                )
             ),
             recommendation=decision_data.get("recommendation"),
             expected_impact=decision_data.get("expected_impact"),
@@ -431,7 +435,6 @@ def save_ai_decision(
         }
 
     except Exception as e:
-
         session.rollback()
 
         print(
@@ -445,7 +448,6 @@ def save_ai_decision(
         }
 
     finally:
-
         session.close()
 
 
