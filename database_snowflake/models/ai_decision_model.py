@@ -1,16 +1,32 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, Float, Date, DateTime
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    Float,
+    Date,
+    DateTime,
+    Identity,
+)
 
 from database_snowflake.base import Base
 
 
 class AIDecision(Base):
+
     __tablename__ = "AI_DECISIONS"
-    __table_args__ = {"schema": "AI_DECISIONS"}
+
+    __table_args__ = {
+        "schema": "AI_DECISIONS",
+    }
 
     id = Column(
         Integer,
+        Identity(
+            start=1,
+            increment=1,
+        ),
         primary_key=True,
         autoincrement=True,
     )

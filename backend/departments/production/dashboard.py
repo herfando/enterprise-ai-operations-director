@@ -3,8 +3,6 @@ from datetime import date
 from fastapi import APIRouter, Query
 
 from database_snowflake.connection import get_snowflake_connection
-from database_snowflake.session import SessionLocal
-from database_snowflake.models.ai_decision_model import AIDecision
 
 from cortex_ai.prompts.production import build_production_decision_prompt
 from cortex_ai.cortex_client import call_cortex_ai
@@ -386,56 +384,74 @@ def save_ai_decision(
     start_date,
     end_date,
 ):
-    session = SessionLocal()
+
+    conn = get_snowflake_connection()
+    cursor = conn.cursor()
+
+    insert_sql = """
+        INSERT INTO DATABASE_SNOWFLAKE.AI_DECISIONS.AI_DECISIONS
+        (
+            DEPARTMENT,
+            START_DATE,
+            END_DATE,
+            TITLE,
+            SEVERITY,
+            PRIORITY,
+            CONFIDENCE,
+            EXECUTIVE_SUMMARY,
+            PRIMARY_PROBLEM,
+            WHY_FIRST,
+            EVIDENCE,
+            BUSINESS_IMPACT,
+            IMMEDIATE_ACTIONS,
+            FOLLOW_UP_ACTIONS,
+            RECOMMENDATION,
+            EXPECTED_IMPACT
+        )
+        VALUES
+        (
+            %s, %s, %s, %s,
+            %s, %s, %s, %s,
+            %s, %s, %s, %s,
+            %s, %s, %s, %s
+        )
+    """
 
     try:
-        ai_decision = AIDecision(
-            department=department,
-            start_date=start_date,
-            end_date=end_date,
-            title=decision_data.get("title"),
-            severity=decision_data.get("severity"),
-            priority=decision_data.get("priority"),
-            confidence=decision_data.get("confidence"),
-            executive_summary=decision_data.get("executive_summary"),
-            primary_problem=decision_data.get("primary_problem"),
-            why_first=decision_data.get("why_first"),
-            evidence=json.dumps(
-                decision_data.get(
-                    "evidence",
-                    [],
-                )
-            ),
-            business_impact=decision_data.get("business_impact"),
-            immediate_actions=json.dumps(
-                decision_data.get(
-                    "immediate_actions",
-                    [],
-                )
-            ),
-            follow_up_actions=json.dumps(
-                decision_data.get(
-                    "follow_up_actions",
-                    [],
-                )
-            ),
-            recommendation=decision_data.get("recommendation"),
-            expected_impact=decision_data.get("expected_impact"),
+
+        values = (
+            department,
+            start_date,
+            end_date,
+            decision_data.get("title"),
+            decision_data.get("severity"),
+            decision_data.get("priority"),
+            decision_data.get("confidence"),
+            decision_data.get("executive_summary"),
+            decision_data.get("primary_problem"),
+            decision_data.get("why_first"),
+            json.dumps(decision_data.get("evidence", [])),
+            decision_data.get("business_impact"),
+            json.dumps(decision_data.get("immediate_actions", [])),
+            json.dumps(decision_data.get("follow_up_actions", [])),
+            decision_data.get("recommendation"),
+            decision_data.get("expected_impact"),
         )
 
-        session.add(ai_decision)
+        cursor.execute(
+            insert_sql,
+            values,
+        )
 
-        session.commit()
-
-        session.refresh(ai_decision)
+        conn.commit()
 
         return {
             "status": "success",
-            "decision_id": ai_decision.id,
         }
 
     except Exception as e:
-        session.rollback()
+
+        conn.rollback()
 
         print(
             "Failed to save AI decision:",
@@ -448,7 +464,9 @@ def save_ai_decision(
         }
 
     finally:
-        session.close()
+
+        cursor.close()
+        conn.close()
 
 
 # =====================================================
