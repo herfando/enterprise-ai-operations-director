@@ -30,7 +30,7 @@ export default function Header() {
   }, []);
 
   return (
-    <section className="flex items-center justify-between mb-8">
+    <section id="dashboard" className="flex items-center justify-between mb-8">
       <div>
         <h1 className="text-3xl font-bold text-slate-900">
           Enterprise AI Command Center

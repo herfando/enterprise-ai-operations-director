@@ -2,13 +2,19 @@
 
 import { useEffect, useState } from "react";
 
-export default function HealthCard() {
-  const [startDate, setStartDate] = useState(
-    new Date().toISOString().slice(0, 10),
-  );
+type HealthCardProps = {
+  startDate: string;
+  endDate: string;
+  setStartDate: (date: string) => void;
+  setEndDate: (date: string) => void;
+};
 
-  const [endDate, setEndDate] = useState(new Date().toISOString().slice(0, 10));
-
+export default function HealthCard({
+  startDate,
+  endDate,
+  setStartDate,
+  setEndDate,
+}: HealthCardProps) {
   const [health, setHealth] = useState<any>(null);
 
   async function fetchHealth() {
@@ -46,17 +52,15 @@ export default function HealthCard() {
   }, [startDate, endDate]);
 
   if (!health) {
-    return (
-      <div className="bg-white rounded-xl shadow p-6">
-        Loading Company Health...
-      </div>
-    );
+    return <div>Loading Company Health...</div>;
   }
 
   return (
     <div className="bg-white rounded-xl shadow p-6">
-      <div className="flex justify-between items-center mb-5">
-        <p className="text-gray-500 text-sm">Company Health Score</p>
+      <div className="flex justify-between items-center">
+        <div>
+          <p className="text-gray-500">Company Health Score</p>
+        </div>
 
         <div className="flex gap-2">
           <input
@@ -75,7 +79,9 @@ export default function HealthCard() {
         </div>
       </div>
 
-      <h2 className="text-5xl font-bold text-slate-900">{health.score}%</h2>
+      <h2 className="text-5xl font-bold text-slate-900 mt-4">
+        {health.score}%
+      </h2>
 
       <div className="mt-6 space-y-4">
         <div className="flex justify-between">

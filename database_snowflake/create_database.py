@@ -5,11 +5,13 @@ from database_snowflake.base import Base
 from database_snowflake.engine import engine
 
 # register ORM models
+
 from database_snowflake.models.product_model import ProductMaster
 from database_snowflake.models.machine_model import MachineMaster
 from database_snowflake.models.employee_model import EmployeeMaster
 from database_snowflake.models.material_model import MaterialMaster
 from database_snowflake.models.production_result_model import ProductionResult
+from database_snowflake.models.ai_decision_model import AIDecision
 
 DATABASE_NAME = "DATABASE_SNOWFLAKE"
 MASTER_SCHEMA = "MASTER_DATA"

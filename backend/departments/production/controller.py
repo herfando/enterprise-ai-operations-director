@@ -2,6 +2,8 @@ from database_snowflake.connection import get_snowflake_connection
 
 from backend.departments.production.rules import validate_production_document
 
+from database_snowflake.models.ai_decision_model import AIDecision
+
 # =====================================================
 # SAVE PRODUCTION RESULT
 # =====================================================

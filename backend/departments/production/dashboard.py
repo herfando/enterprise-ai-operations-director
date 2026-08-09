@@ -3,11 +3,17 @@ from datetime import date
 from fastapi import APIRouter, Query
 
 from database_snowflake.connection import get_snowflake_connection
+from database_snowflake.session import SessionLocal
+from database_snowflake.models.ai_decision_model import AIDecision
 
 from cortex_ai.prompts.production import build_production_decision_prompt
 from cortex_ai.cortex_client import call_cortex_ai
+import json
 
-router = APIRouter(prefix="/production", tags=["Production Dashboard"])
+router = APIRouter(
+    prefix="/production",
+    tags=["Production Dashboard"],
+)
 
 
 # =====================================================
@@ -89,11 +95,26 @@ def calculate_oee(rows):
     oee = (availability * performance * quality) / 10000
 
     return {
-        "availability": round(availability, 2),
-        "performance": round(performance, 2),
-        "quality": round(quality, 2),
-        "oee": round(oee, 2),
-        "yield": round(yield_percent, 2),
+        "availability": round(
+            availability,
+            2,
+        ),
+        "performance": round(
+            performance,
+            2,
+        ),
+        "quality": round(
+            quality,
+            2,
+        ),
+        "oee": round(
+            oee,
+            2,
+        ),
+        "yield": round(
+            yield_percent,
+            2,
+        ),
     }
 
 
@@ -102,7 +123,10 @@ def calculate_oee(rows):
 # =====================================================
 
 
-def group_production(rows, index):
+def group_production(
+    rows,
+    index,
+):
 
     result = {}
 
@@ -126,7 +150,11 @@ def group_production(rows, index):
 
 def create_pareto(data):
 
-    sorted_data = sorted(data.items(), key=lambda x: x[1], reverse=True)
+    sorted_data = sorted(
+        data.items(),
+        key=lambda x: x[1],
+        reverse=True,
+    )
 
     total = sum(value for _, value in sorted_data)
 
@@ -148,8 +176,14 @@ def create_pareto(data):
             {
                 "name": name,
                 "value": value,
-                "percentage": round(percentage, 2),
-                "cumulative_percentage": round(cumulative, 2),
+                "percentage": round(
+                    percentage,
+                    2,
+                ),
+                "cumulative_percentage": round(
+                    cumulative,
+                    2,
+                ),
             }
         )
 
@@ -171,7 +205,10 @@ def machine_achievement(rows):
 
         if machine not in machines:
 
-            machines[machine] = {"planning": 0, "production": 0}
+            machines[machine] = {
+                "planning": 0,
+                "production": 0,
+            }
 
         machines[machine]["planning"] += row[4] or 0
 
@@ -187,7 +224,10 @@ def machine_achievement(rows):
 
             achievement = (data["production"] / data["planning"]) * 100
 
-        result[machine] = round(achievement, 2)
+        result[machine] = round(
+            achievement,
+            2,
+        )
 
     return result
 
@@ -198,7 +238,10 @@ def machine_achievement(rows):
 
 
 @router.get("/dashboard")
-def production_dashboard(start_date: date = Query(...), end_date: date = Query(...)):
+def production_dashboard(
+    start_date: date = Query(...),
+    end_date: date = Query(...),
+):
 
     conn = get_snowflake_connection()
 
@@ -207,73 +250,65 @@ def production_dashboard(start_date: date = Query(...), end_date: date = Query(.
     try:
 
         cursor.execute(f"""
+            SELECT
 
-        SELECT
+            START_PRODUCTION,
+            FINISH_PRODUCTION,
+            MACHINE_NAME,
+            PRODUCT_NAME,
+            TOTAL_PLANNING,
+            TOTAL_PRODUCTION,
+            GOOD_PRODUCT,
+            REJECT_PRODUCT,
+            DOWNTIME_MINUTES,
+            MATERIAL_NAME,
+            MATERIAL_USAGE_KG,
+            MATERIAL_REMAINING_KG,
+            OPERATOR_NAME,
+            SHIFT_OPERATOR,
+            OPERATOR_GROUP,
+            TARGET_STATUS
 
+            FROM DATABASE_SNOWFLAKE.MASTER_DATA.PRODUCTION_RESULT
 
-        START_PRODUCTION,
-
-        FINISH_PRODUCTION,
-
-        MACHINE_NAME,
-
-        PRODUCT_NAME,
-
-        TOTAL_PLANNING,
-
-        TOTAL_PRODUCTION,
-
-        GOOD_PRODUCT,
-
-        REJECT_PRODUCT,
-
-        DOWNTIME_MINUTES,
-
-        MATERIAL_NAME,
-
-        MATERIAL_USAGE_KG,
-
-        MATERIAL_REMAINING_KG,
-
-        OPERATOR_NAME,
-
-        SHIFT_OPERATOR,
-
-        OPERATOR_GROUP,
-
-        TARGET_STATUS
-
-
-
-        FROM DATABASE_SNOWFLAKE.MASTER_DATA.PRODUCTION_RESULT
-
-
-
-        WHERE START_PRODUCTION::DATE
-
-        BETWEEN '{start_date}'
-
-        AND '{end_date}'
-
-
-
-        """)
+            WHERE START_PRODUCTION::DATE
+            BETWEEN '{start_date}'
+            AND '{end_date}'
+            """)
 
         rows = cursor.fetchall()
 
         if not rows:
 
-            return {"status": "empty", "message": "No production data"}
+            return {
+                "status": "empty",
+                "message": "No production data",
+            }
 
-        production_machine = group_production(rows, 2)
+        production_machine = group_production(
+            rows,
+            2,
+        )
 
-        production_operator = group_production(rows, 12)
+        production_operator = group_production(
+            rows,
+            12,
+        )
 
-        production_shift = group_production(rows, 13)
+        production_shift = group_production(
+            rows,
+            13,
+        )
 
-        production_group = group_production(rows, 14)
+        production_group = group_production(
+            rows,
+            14,
+        )
 
-        production_product = group_production(rows, 3)
+        production_product = group_production(
+            rows,
+            3,
+        )
 
         material_usage = {}
 
@@ -293,7 +328,10 @@ def production_dashboard(start_date: date = Query(...), end_date: date = Query(.
 
             machine = row[2]
 
-            downtime_machine[machine] = downtime_machine.get(machine, 0) + (row[8] or 0)
+            downtime_machine[machine] = downtime_machine.get(
+                machine,
+                0,
+            ) + (row[8] or 0)
 
         reject_product = {}
 
@@ -301,7 +339,10 @@ def production_dashboard(start_date: date = Query(...), end_date: date = Query(.
 
             product = row[3]
 
-            reject_product[product] = reject_product.get(product, 0) + (row[7] or 0)
+            reject_product[product] = reject_product.get(
+                product,
+                0,
+            ) + (row[7] or 0)
 
         return {
             "start_date": str(start_date),
@@ -335,6 +376,80 @@ def production_dashboard(start_date: date = Query(...), end_date: date = Query(.
 
 
 # =====================================================
+# SAVE AI DECISION
+# =====================================================
+
+
+def save_ai_decision(
+    decision_data,
+    department,
+    start_date,
+    end_date,
+):
+
+    session = SessionLocal()
+
+    try:
+
+        ai_decision = AIDecision(
+            department=department,
+            start_date=start_date,
+            end_date=end_date,
+            title=decision_data.get("title"),
+            severity=decision_data.get("severity"),
+            priority=decision_data.get("priority"),
+            confidence=decision_data.get("confidence"),
+            executive_summary=decision_data.get("executive_summary"),
+            primary_problem=decision_data.get("primary_problem"),
+            why_first=decision_data.get("why_first"),
+            evidence=decision_data.get(
+                "evidence",
+                [],
+            ),
+            business_impact=decision_data.get("business_impact"),
+            immediate_actions=decision_data.get(
+                "immediate_actions",
+                [],
+            ),
+            follow_up_actions=decision_data.get(
+                "follow_up_actions",
+                [],
+            ),
+            recommendation=decision_data.get("recommendation"),
+            expected_impact=decision_data.get("expected_impact"),
+        )
+
+        session.add(ai_decision)
+
+        session.commit()
+
+        session.refresh(ai_decision)
+
+        return {
+            "status": "success",
+            "decision_id": ai_decision.id,
+        }
+
+    except Exception as e:
+
+        session.rollback()
+
+        print(
+            "Failed to save AI decision:",
+            e,
+        )
+
+        return {
+            "status": "failed",
+            "error": str(e),
+        }
+
+    finally:
+
+        session.close()
+
+
+# =====================================================
 # AI PRODUCTION DECISION
 # =====================================================
 
@@ -345,23 +460,72 @@ def production_decision(
     end_date: date = Query(...),
 ):
 
-    # Ambil data Production yang SUDAH dianalisis
+    # =================================================
+    # GET PROCESSED DASHBOARD DATA
+    # =================================================
+
     dashboard_data = production_dashboard(
         start_date=start_date,
         end_date=end_date,
     )
 
     if dashboard_data.get("status") == "empty":
+
         return {
             "status": "empty",
-            "message": "No production data available for AI decision.",
+            "message": ("No production data " "available for AI decision."),
         }
 
-    # Buat prompt berdasarkan hasil dashboard
+    # =================================================
+    # BUILD AI PROMPT
+    # =================================================
+
     prompt = build_production_decision_prompt(dashboard_data)
 
-    # Kirim ke Cortex
+    # =================================================
+    # CALL CORTEX AI
+    # =================================================
+
     ai_result = call_cortex_ai(prompt)
+
+    # =================================================
+    # CONVERT CORTEX RESPONSE TO DICT
+    # =================================================
+
+    if isinstance(ai_result, str):
+
+        ai_result = ai_result.strip()
+
+        if ai_result.startswith("```json"):
+
+            ai_result = ai_result[7:]
+
+        elif ai_result.startswith("```"):
+
+            ai_result = ai_result[3:]
+
+        if ai_result.endswith("```"):
+
+            ai_result = ai_result[:-3]
+
+        ai_result = ai_result.strip()
+
+        ai_result = json.loads(ai_result)
+
+    # =================================================
+    # SAVE AI DECISION TO SNOWFLAKE
+    # =================================================
+
+    ai_save_result = save_ai_decision(
+        decision_data=ai_result,
+        department="Production",
+        start_date=start_date,
+        end_date=end_date,
+    )
+
+    # =================================================
+    # RETURN TO FRONTEND
+    # =================================================
 
     return {
         "status": "success",
@@ -369,4 +533,5 @@ def production_decision(
         "start_date": str(start_date),
         "end_date": str(end_date),
         "decision": ai_result,
+        "ai_database": ai_save_result,
     }
