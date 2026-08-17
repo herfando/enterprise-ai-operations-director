@@ -22,6 +22,9 @@ export default function Sidebar() {
         <a href="#workflows" className="hover:text-blue-400 cursor-pointer">
           Workflows
         </a>
+        <a href="#work-orders" className="hover:text-blue-400 cursor-pointer">
+          Work Orders
+        </a>
       </nav>
     </aside>
   );

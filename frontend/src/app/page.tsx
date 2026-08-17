@@ -6,6 +6,7 @@ import EnterpriseDataUpload from "@/components/EnterpriseDataUpload/EnterpriseDa
 import CompanyOverview from "@/components/CompanyOverview/CompanyOverview";
 import DepartmentIntelligence from "@/components/DepartmentIntelligence/DepartmentIntelligence";
 import AIOperationsSection from "@/components/AIOperations/AIOperationsSection";
+import WorkOrders from "@/components/WorkOrders/WorkOrders";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
           <CompanyOverview />
           <DepartmentIntelligence />
           <AIOperationsSection />
+          <WorkOrders />
         </section>
       </main>
     </>
