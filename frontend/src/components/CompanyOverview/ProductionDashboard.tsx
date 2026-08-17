@@ -108,7 +108,7 @@ export default function ProductionDashboard() {
               margin={{
                 top: 30,
                 right: 20,
-                left: 10,
+                left: 35,
                 bottom: 55,
               }}
             >
