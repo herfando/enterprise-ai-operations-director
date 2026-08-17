@@ -12,6 +12,7 @@ from database_snowflake.models.employee_model import EmployeeMaster
 from database_snowflake.models.material_model import MaterialMaster
 from database_snowflake.models.production_result_model import ProductionResult
 from database_snowflake.models.ai_decision_model import AIDecision
+from database_snowflake.models.maintenance_request_model import MaintenanceRequest
 
 DATABASE_NAME = "DATABASE_SNOWFLAKE"
 MASTER_SCHEMA = "MASTER_DATA"
