@@ -3,6 +3,7 @@ uvicorn
 python-multipart
 pandas
 openpyxl
+reportlab
 snowflake-connector-python
 python-dotenv
 sqlalchemy

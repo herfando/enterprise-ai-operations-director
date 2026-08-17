@@ -1,10 +1,14 @@
 from datetime import date, datetime
 from typing import Optional
 
-from fastapi import HTTPException
+from fastapi import APIRouter, HTTPException, Query
 
 from database_snowflake.connection import get_snowflake_connection
 
+router = APIRouter(
+    prefix="/production",
+    tags=["Production Maintenance"],
+)
 # =====================================================
 # MAINTENANCE REQUEST CONFIGURATION
 # =====================================================
@@ -631,3 +635,58 @@ def create_maintenance_request_template(
         "filename": (f"{request['request_id']}" "_Maintenance_Request.xlsx"),
         "template": template,
     }
+
+
+# =====================================================
+# MAINTENANCE REQUEST ENDPOINTS
+# =====================================================
+
+
+@router.get("/maintenance-request")
+def maintenance_request_candidates_endpoint(
+    start_date: date = Query(...),
+    end_date: date = Query(...),
+):
+    """
+    Get all machines ranked for maintenance.
+    """
+
+    return get_maintenance_candidates(
+        start_date=start_date,
+        end_date=end_date,
+    )
+
+
+@router.post("/maintenance-request")
+def create_maintenance_request_endpoint(
+    start_date: date = Query(...),
+    end_date: date = Query(...),
+    machine_name: str = Query(...),
+):
+    """
+    Production creates a Maintenance Request
+    for the selected machine.
+    """
+
+    return create_maintenance_request(
+        start_date=start_date,
+        end_date=end_date,
+        machine_name=machine_name,
+    )
+
+
+@router.get("/maintenance-request/template")
+def maintenance_request_template_endpoint(
+    start_date: date = Query(...),
+    end_date: date = Query(...),
+    machine_name: str = Query(...),
+):
+    """
+    Get Maintenance Request template data.
+    """
+
+    return create_maintenance_request_template(
+        start_date=start_date,
+        end_date=end_date,
+        machine_name=machine_name,
+    )

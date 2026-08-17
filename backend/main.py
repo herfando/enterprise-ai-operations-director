@@ -5,6 +5,13 @@ from backend.engine.workflow_engine import router as workflow_router
 from backend.departments.production.dashboard import (
     router as production_dashboard_router,
 )
+from backend.departments.production.maintenance_request import (
+    router as maintenance_request_router,
+)
+
+from backend.departments.production.workorder import (
+    router as production_work_order_router,
+)
 
 app = FastAPI(title="Enterprise AI Operations Director")
 
@@ -29,6 +36,12 @@ app.include_router(workflow_router)
 
 # production dashboard endpoint
 app.include_router(production_dashboard_router)
+
+# production work order endpoint
+app.include_router(production_work_order_router)
+
+# production maintenance request endpoint
+app.include_router(maintenance_request_router)
 
 
 @app.get("/")
