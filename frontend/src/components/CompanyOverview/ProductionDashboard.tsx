@@ -162,9 +162,19 @@ export default function ProductionDashboard() {
                 dataKey="value"
                 name="Quantity"
                 barSize={35}
-                fill="#2563eb"
+                fill="#1E3A5F"
                 radius={[4, 4, 0, 0]}
-              />
+              >
+                <LabelList
+                  dataKey="value"
+                  position="top"
+                  formatter={(value: any) => Number(value).toLocaleString()}
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 600,
+                  }}
+                />
+              </Bar>
 
               {/* LINE - CUMULATIVE % */}
               <Line
@@ -198,7 +208,7 @@ export default function ProductionDashboard() {
         {/* LEGEND */}
         <div className="mt-3 flex items-center justify-center gap-6 text-xs text-slate-600">
           <div className="flex items-center gap-2">
-            <span className="h-3 w-3 rounded-sm bg-blue-600" />
+            <span className="h-3 w-3 rounded-sm bg-[#1E3A5F]" />
             <span>Quantity</span>
           </div>
 
@@ -289,42 +299,60 @@ export default function ProductionDashboard() {
       </div>
 
       {/* =====================================================
-          PARETO ANALYSIS
-      ===================================================== */}
+    PARETO ANALYSIS
+    ===================================================== */}
 
       <h3 className="mb-2 text-xl font-bold text-slate-900">
         Production Pareto Analysis
       </h3>
 
       <p className="mb-5 text-sm text-slate-500">
-        Pareto analysis identifies the major contributors to production volume
-        across machines, operators, shifts, groups, products, and materials.
+        Pareto analysis identifies the major contributors to downtime and reject
+        across machines, products, operators, groups, shifts, and materials.
       </p>
 
       <div className="grid gap-6 md:grid-cols-2">
-        {/* MACHINE */}
+        {/* 1. DOWNTIME BY MACHINE */}
         <ParetoChart
-          title="Pareto Production Machine"
-          data={data.production_by_machine}
+          title="Downtime by Machine"
+          data={data.pareto.downtime_by_machine}
         />
 
-        {/* OPERATOR */}
+        {/* 2. REJECT BY MACHINE */}
         <ParetoChart
-          title="Pareto Operator"
-          data={data.production_by_operator}
+          title="Reject by Machine"
+          data={data.pareto.reject_by_machine}
         />
 
-        {/* SHIFT */}
-        <ParetoChart title="Pareto Shift" data={data.production_by_shift} />
+        {/* 3. REJECT BY PRODUCT */}
+        <ParetoChart
+          title="Reject by Product"
+          data={data.pareto.reject_by_product}
+        />
 
-        {/* GROUP */}
-        <ParetoChart title="Pareto Group" data={data.production_by_group} />
+        {/* 4. REJECT BY OPERATOR */}
+        <ParetoChart
+          title="Reject by Operator"
+          data={data.pareto.reject_by_operator}
+        />
 
-        {/* PRODUCT */}
-        <ParetoChart title="Pareto Product" data={data.production_by_product} />
+        {/* 5. REJECT BY GROUP */}
+        <ParetoChart
+          title="Reject by Operator Group"
+          data={data.pareto.reject_by_group}
+        />
 
-        {/* MATERIAL */}
-        <ParetoChart title="Material Usage" data={data.material_by_name} />
+        {/* 6. REJECT BY SHIFT */}
+        <ParetoChart
+          title="Reject by Shift"
+          data={data.pareto.reject_by_shift}
+        />
+
+        {/* 7. REJECT BY MATERIAL */}
+        <ParetoChart
+          title="Reject by Material"
+          data={data.pareto.reject_by_material}
+        />
       </div>
     </div>
   );

@@ -121,22 +121,18 @@ def calculate_oee(rows):
 # =====================================================
 
 
-def group_production(
-    rows,
-    index,
-):
+def group_sum(rows, key_index, value_index):
 
     result = {}
 
     for row in rows:
 
-        key = row[index]
+        key = row[key_index]
 
-        if key not in result:
+        if key is None:
+            key = "Unknown"
 
-            result[key] = 0
-
-        result[key] += row[5] or 0
+        result[key] = result.get(key, 0) + (row[value_index] or 0)
 
     return result
 
@@ -283,29 +279,46 @@ def production_dashboard(
                 "message": "No production data",
             }
 
-        production_machine = group_production(
+        downtime_by_machine = group_sum(
             rows,
             2,
+            8,
         )
 
-        production_operator = group_production(
+        reject_by_machine = group_sum(
             rows,
-            12,
+            2,
+            7,
         )
 
-        production_shift = group_production(
-            rows,
-            13,
-        )
-
-        production_group = group_production(
-            rows,
-            14,
-        )
-
-        production_product = group_production(
+        reject_by_product = group_sum(
             rows,
             3,
+            7,
+        )
+
+        reject_by_operator = group_sum(
+            rows,
+            12,
+            7,
+        )
+
+        reject_by_group = group_sum(
+            rows,
+            14,
+            7,
+        )
+
+        reject_by_shift = group_sum(
+            rows,
+            13,
+            7,
+        )
+
+        reject_by_material = group_sum(
+            rows,
+            9,
+            7,
         )
 
         material_usage = {}
@@ -320,28 +333,6 @@ def production_dashboard(
 
             material_usage[material] += row[10] or 0
 
-        downtime_machine = {}
-
-        for row in rows:
-
-            machine = row[2]
-
-            downtime_machine[machine] = downtime_machine.get(
-                machine,
-                0,
-            ) + (row[8] or 0)
-
-        reject_product = {}
-
-        for row in rows:
-
-            product = row[3]
-
-            reject_product[product] = reject_product.get(
-                product,
-                0,
-            ) + (row[7] or 0)
-
         return {
             "start_date": str(start_date),
             "end_date": str(end_date),
@@ -353,16 +344,14 @@ def production_dashboard(
                 "total_material_usage_kg": sum(row[10] or 0 for row in rows),
             },
             "oee": calculate_oee(rows),
-            "production_by_machine": create_pareto(production_machine),
-            "production_by_operator": create_pareto(production_operator),
-            "production_by_shift": create_pareto(production_shift),
-            "production_by_group": create_pareto(production_group),
-            "production_by_product": create_pareto(production_product),
-            "material_by_name": create_pareto(material_usage),
             "pareto": {
-                "downtime_machine": create_pareto(downtime_machine),
-                "reject_product": create_pareto(reject_product),
-                "machine_achievement": create_pareto(machine_achievement(rows)),
+                "downtime_by_machine": create_pareto(downtime_by_machine),
+                "reject_by_machine": create_pareto(reject_by_machine),
+                "reject_by_product": create_pareto(reject_by_product),
+                "reject_by_operator": create_pareto(reject_by_operator),
+                "reject_by_group": create_pareto(reject_by_group),
+                "reject_by_shift": create_pareto(reject_by_shift),
+                "reject_by_material": create_pareto(reject_by_material),
             },
         }
 

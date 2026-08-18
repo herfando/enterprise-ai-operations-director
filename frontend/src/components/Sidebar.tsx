@@ -29,12 +29,12 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        <div className="mb-8 flex items-center justify-between">
+        <div className=" mb-8 flex items-center justify-between">
           <h1 className="text-xl font-bold">AI Operations Director</h1>
 
           <button
             onClick={() => setIsOpen(false)}
-            className="
+            className="cursor-pointer
               rounded-md
               px-2 py-1
               text-slate-400
