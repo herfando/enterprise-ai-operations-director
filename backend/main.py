@@ -13,6 +13,10 @@ from backend.departments.production.workorder import (
     router as production_work_order_router,
 )
 
+from backend.database.production import (
+    router as production_database_router,
+)
+
 app = FastAPI(title="Enterprise AI Operations Director")
 
 
@@ -42,6 +46,8 @@ app.include_router(production_work_order_router)
 
 # production maintenance request endpoint
 app.include_router(maintenance_request_router)
+
+app.include_router(production_database_router)
 
 
 @app.get("/")

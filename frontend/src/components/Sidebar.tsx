@@ -1,31 +1,82 @@
-export default function Sidebar() {
+"use client";
+
+import Link from "next/link";
+
+type SidebarProps = {
+  isOpen: boolean;
+  setIsOpen: (value: boolean) => void;
+};
+
+export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   return (
-    <aside className="sticky top-0 h-screen w-64 bg-slate-900 text-white p-6">
-      <h1 className="text-xl font-bold mb-8">AI Operations Director</h1>
+    <>
+      {/* LEFT EDGE HOT ZONE */}
+      {!isOpen && (
+        <div
+          onMouseEnter={() => setIsOpen(true)}
+          className="fixed left-0 top-0 z-50 h-screen w-5"
+        />
+      )}
 
-      <nav className="space-y-4 flex flex-col">
-        <a href="#dashboard" className="hover:text-blue-400 cursor-pointer">
-          Dashboard
-        </a>
+      {/* SIDEBAR */}
+      <aside
+        className={`
+          fixed left-0 top-0 z-40
+          flex h-screen w-64 flex-col
+          bg-slate-900 p-6 text-white
+          shadow-xl
+          transition-transform duration-300 ease-in-out
+          ${isOpen ? "translate-x-0" : "-translate-x-full"}
+        `}
+      >
+        <div className="mb-8 flex items-center justify-between">
+          <h1 className="text-xl font-bold">AI Operations Director</h1>
 
-        <a href="#departments" className="hover:text-blue-400 cursor-pointer">
-          Departments
-        </a>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="
+              rounded-md
+              px-2 py-1
+              text-slate-400
+              hover:bg-slate-800
+              hover:text-white
+            "
+            aria-label="Close sidebar"
+          >
+            ✕
+          </button>
+        </div>
 
-        <a href="#analytics" className="hover:text-blue-400 cursor-pointer">
-          Analytics
-        </a>
-        <a href="#ai-decisions" className="hover:text-blue-400 cursor-pointer">
-          AI Decisions
-        </a>
+        <nav className="flex flex-col space-y-4">
+          <Link href="/" className="hover:text-blue-400">
+            Dashboard
+          </Link>
 
-        <a href="#workflows" className="hover:text-blue-400 cursor-pointer">
-          Workflows
-        </a>
-        <a href="#work-orders" className="hover:text-blue-400 cursor-pointer">
-          Work Orders
-        </a>
-      </nav>
-    </aside>
+          <Link href="/#departments" className="hover:text-blue-400">
+            Departments
+          </Link>
+
+          <Link href="/#analytics" className="hover:text-blue-400">
+            Analytics
+          </Link>
+
+          <Link href="/#ai-decisions" className="hover:text-blue-400">
+            AI Decisions
+          </Link>
+
+          <Link href="/#workflows" className="hover:text-blue-400">
+            Workflows
+          </Link>
+
+          <Link href="/#work-orders" className="hover:text-blue-400">
+            Work Orders
+          </Link>
+
+          <Link href="/database" className="hover:text-blue-400">
+            Database
+          </Link>
+        </nav>
+      </aside>
+    </>
   );
 }

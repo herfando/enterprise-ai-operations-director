@@ -173,7 +173,7 @@ export default function WorkOrders() {
               <button
                 onClick={() => downloadFile(workOrder.request_id, "excel")}
                 disabled={downloading === `${workOrder.request_id}-excel`}
-                className="rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+                className="cursor-pointer rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {downloading === `${workOrder.request_id}-excel`
                   ? "Downloading..."
@@ -186,7 +186,7 @@ export default function WorkOrders() {
               <button
                 onClick={() => downloadFile(workOrder.request_id, "pdf")}
                 disabled={downloading === `${workOrder.request_id}-pdf`}
-                className="rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+                className="cursor-pointer rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {downloading === `${workOrder.request_id}-pdf`
                   ? "Downloading..."
